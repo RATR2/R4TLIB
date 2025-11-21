@@ -1,0 +1,35 @@
+## Hello, Im R4T, im creating this library to help you with skript.
+## this is my first library, so please be kind with me :3
+## if you have any suggestions or found any bugs, please contact me on discord:  R4T2_
+## This file is called !R4T.sk because skript load files in alphabetical order, so this file will be loaded first.
+
+options:
+	LIB_PREFIX: R4TLIB
+	LIB_FOLDER: LIB/ #customizable for your use case. 
+	FEATURE_FOLDER: feature/ #customizable for your use case. 
+	# any and all features below share the same name as their module file. eg: (SMP_MOTD: true) = LIB/feature/SMP_MOTD.sk
+	LIB_SMP_MOTD: false
+	LIB_SMP_COOLDOWNS: false
+	LIB_SMP_ITEMHANDLER: false
+	LIB_SMP_GLOWINGHANDLER: false
+	LIB_SMP_ACTIONBAR: false
+	LIB_SMP_CUSTOMENCHANTS: false #! WIP
+	LIB_SMP_ITEMADDER: false #! WIP
+	LIB_SMP_DISKY: false #! WIP
+on load:
+	#Step 1, Get versions:
+	set {%{@LIB_PREFIX}%_skversion} to skript version
+	set {%{@LIB_PREFIX}%_mcver} to minecraft version
+	#Step 2, Figure out what skript addons the user has.
+	loop addons list:
+		add loop-value to {_addons::*}
+		send "&a[{@LIB_PREFIX}] &7Found addon: &e%loop-value%" to console
+	#Step 3, Check what features are enabled and or avalible.
+	
+local function loadfeature(feature: text, requiredaddons: strings = ""):
+	if {@LIB_%{_feature}%} is true:
+		if file exists "{@LIB_FOLDER}{@FEATURE_FOLDER}{_feature}.sk":
+			send "&a[{@LIB_PREFIX}] &7Loading feature: &e%{_feature}%" to console
+			load file "{@LIB_FOLDER}{@FEATURE_FOLDER}{_feature}.sk"
+		else:
+			send "&c[{@LIB_PREFIX}] &7Feature &e%{_feature}% &7is enabled but the file was not found in &e{@LIB_FOLDER}" to console			

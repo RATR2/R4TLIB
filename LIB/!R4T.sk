@@ -2,11 +2,10 @@
 ## this is my first library, so please be kind with me :3
 ## if you have any suggestions or found any bugs, please contact me on discord:  R4T2_
 ## This file is called !R4T.sk because skript load files in alphabetical order, so this file will be loaded first.
-
 options:
 	LIB_PREFIX: R4TLIB
-	LIB_FOLDER: LIB/ #customizable for your use case. 
-	FEATURE_FOLDER: feature/ #customizable for your use case. 
+	LIB_FOLDER: LIB/ #! do not change
+	FEATURE_FOLDER: feature/ #! do not change
 	# any and all features below share the same name as their module file. eg: (SMP_MOTD: true) = LIB/feature/SMP_MOTD.sk
 	LIB_SMP_MOTD: false
 	LIB_SMP_COOLDOWNS: false
@@ -16,6 +15,14 @@ options:
 	LIB_SMP_CUSTOMENCHANTS: false #! WIP
 	LIB_SMP_ITEMADDER: false #! WIP
 	LIB_SMP_DISKY: false #! WIP
+	LIB_CORE_SMALLCAPS: true
+local function loadfeature(feature: text, requiredaddons: strings = ""):
+	if {@LIB_%{_feature}%} is true:
+		if file exists "{@LIB_FOLDER}{@FEATURE_FOLDER}{_feature}.sk":
+			send "&a[{@LIB_PREFIX}] &7Loading feature: &e%{_feature}%" to console
+			load file "{@LIB_FOLDER}{@FEATURE_FOLDER}{_feature}.sk"
+		else:
+			send "&c[{@LIB_PREFIX}] &7Feature &e%{_feature}% &7is enabled but the file was not found in &e{@LIB_FOLDER}" to console	
 on load:
 	#Step 1, Get versions:
 	set {%{@LIB_PREFIX}%_skversion} to skript version
@@ -25,11 +32,22 @@ on load:
 		add loop-value to {_addons::*}
 		send "&a[{@LIB_PREFIX}] &7Found addon: &e%loop-value%" to console
 	#Step 3, Check what features are enabled and or avalible.
-	
-local function loadfeature(feature: text, requiredaddons: strings = ""):
-	if {@LIB_%{_feature}%} is true:
-		if file exists "{@LIB_FOLDER}{@FEATURE_FOLDER}{_feature}.sk":
-			send "&a[{@LIB_PREFIX}] &7Loading feature: &e%{_feature}%" to console
-			load file "{@LIB_FOLDER}{@FEATURE_FOLDER}{_feature}.sk"
-		else:
-			send "&c[{@LIB_PREFIX}] &7Feature &e%{_feature}% &7is enabled but the file was not found in &e{@LIB_FOLDER}" to console			
+	if {@LIB_SMP_MOTD} is true:
+		loadfeature("SMP_MOTD", "")
+	if {@LIB_SMP_COOLDOWNS} is true:
+		loadfeature("SMP_COOLDOWNS", "")
+	if {@LIB_SMP_ITEMHANDLER} is true:
+		loadfeature("SMP_ITEMHANDLER", "")
+	if {@LIB_SMP_GLOWINGHANDLER} is true:
+		loadfeature("SMP_GLOWINGHANDLER", "")
+	if {@LIB_SMP_ACTIONBAR} is true:
+		loadfeature("SMP_ACTIONBAR", "")
+	if {@LIB_SMP_CUSTOMENCHANTS} is true:
+		loadfeature("SMP_CUSTOMENCHANTS", "")
+	if {@LIB_SMP_ITEMADDER} is true:
+		loadfeature("SMP_ITEMADDER", "")
+	if {@LIB_SMP_DISKY} is true:
+		loadfeature("SMP_DISKY", "")
+	if {@LIB_CORE_SMALLCAPS} is true:
+		loadfeature("CORE_SMALLCAPS", "")
+	send "&a[{@LIB_PREFIX}] &7Finished loading libraries!" to console

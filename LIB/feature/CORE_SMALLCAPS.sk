@@ -1,0 +1,52 @@
+options:
+	LIB_PREFIX: R4TLIB
+	LIB_FOLDER: LIB/ #! do not change
+	FEATURE_ID: CORE_SMALLCAPS
+	FEATURE_FOLDER: feature/ #! do not change
+on load:
+	if script "{@LIB_FOLDER}{@FEATURE_FOLDER}{@FEATURE_ID}.sk" is not loaded:
+		send "&7The main script is not enabled! Disabling Determined script... ({@FEATURE_ID}.sk)" to console
+		disable script file "{@FEATURE_ID}.sk"
+import:
+	org.bukkit.Bukkit
+	java.lang.System
+	java.lang.Character
+	java.time.Duration
+function toSmallCaps(s: text) :: text:
+	set {_normalText::*} to "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y" and "Z" #!RAT was here, Added a Y, you dumbass hyper.
+	set {_smallText::*} to "ᴀ", "ʙ", "ᴄ", "ᴅ", "ᴇ", "ғ", "ɢ", "ʜ", "ɪ", "ᴊ", "ᴋ", "ʟ", "ᴍ", "ɴ", "ᴏ", "ᴘ", "ᴏ̨", "ʀ", "s", "ᴛ", "ᴜ", "ᴠ", "ᴡ", "x", "ʏ" and "ᴢ"
+	set {_newString} to ""
+	set {_skip} to false
+	set {_s} to raw {_s}
+	loop {_s}'s length times:
+		set {_value} to (loop-iteration-1) - 1
+		set {_skip} to false
+		set {_set} to char at {_value} in {_s}
+		loop {_normalText::*}:
+			if {_skip} is true:
+				continue
+			if {_noColor} isn't true:
+				if {_set} is "&":
+					if char at {_value} + 1 in {_s} is "&":
+						set {_noColor} to true
+						exit 4 sections
+					add {_set} to {_newString}
+					set {_skip} to true
+					set {_nextSkipAdd} to true
+					continue
+				if {_nextSkipAdd} is true:
+					{_noColor} isn't true
+					add {_set} to {_newString}
+					set {_skip} to true
+					delete {_nextSkipAdd}
+					continue
+			else:
+				delete {_noColor}
+			if Character.isLetter({_set}.toUpperCase()) is not true:
+				add {_set} to {_newString}
+				set {_skip} to true
+				continue
+			if loop-value-2 is {_set}:
+				add {_smallText::%loop-iteration-2%} to {_newString}
+		set {_skip} to false
+	return colored {_newString}

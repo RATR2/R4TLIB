@@ -1,0 +1,9 @@
+options:
+	LIB_PREFIX: R4TLIB
+	LIB_FOLDER: LIB/ #! do not change
+	FEATURE_ID: TEMPLATE
+	FEATURE_FOLDER: feature/ #! do not change
+on load:
+	if script "{@LIB_FOLDER}{@FEATURE_FOLDER}{@FEATURE_ID}.sk" is not loaded:
+		send "&7The main script is not enabled! Disabling Determined script... ({@FEATURE_ID}.sk)" to console
+		disable script file "{@FEATURE_ID}.sk"

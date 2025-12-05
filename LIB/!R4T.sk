@@ -16,17 +16,21 @@ options:
 	LIB_SMP_ITEMADDER: false #! WIP
 	LIB_SMP_DISKY: false #! WIP
 	LIB_CORE_SMALLCAPS: true
+local function loadfeature(feature: text, requiredaddons: strings = ""):
+	if {@LIB_%{_feature}%} is true:
+		if file exists "{@LIB_FOLDER}{@FEATURE_FOLDER}{_feature}.sk":
+			send "&a[{@LIB_PREFIX}] &7Loading feature: &e%{_feature}%" to console
+			load file "{@LIB_FOLDER}{@FEATURE_FOLDER}{_feature}.sk"
+		else:
+			send "&c[{@LIB_PREFIX}] &7Feature &e%{_feature}% &7is enabled but the file was not found in &e{@LIB_FOLDER}" to console	
 on load:
 	#Step 1, Get versions:
-	set {globals::prefix} to {@LIB_PREFIX}
-	set {globals::debug} to true
-	set {globals::skversion} to skript version
-	set {globals::mcver} to minecraft version
+	set {%{@LIB_PREFIX}%_skversion} to skript version
+	set {%{@LIB_PREFIX}%_mcver} to minecraft version
 	#Step 2, Figure out what skript addons the user has.
 	loop addons list:
-		add loop-value to {globals::addons::*}
-		if {globals::debug} = true:
-			send "&a[{@LIB_PREFIX}] &7Found addon: &e%loop-value%" to console
+		add loop-value to {_addons::*}
+		send "&a[{@LIB_PREFIX}] &7Found addon: &e%loop-value%" to console
 	#Step 3, Check what features are enabled and or avalible.
 	if {@LIB_SMP_MOTD} is true:
 		loadfeature("SMP_MOTD", "")
@@ -47,10 +51,3 @@ on load:
 	if {@LIB_CORE_SMALLCAPS} is true:
 		loadfeature("CORE_SMALLCAPS", "")
 	send "&a[{@LIB_PREFIX}] &7Finished loading libraries!" to console
-local function loadfeature(feature: text, requiredaddons: strings = ""):
-	if {@LIB_%{_feature}%} is true:
-		if file exists "{@LIB_FOLDER}{@FEATURE_FOLDER}{_feature}.sk":
-			send "&a[{@LIB_PREFIX}] &7Loading feature: &e%{_feature}%" to console
-			load file "{@LIB_FOLDER}{@FEATURE_FOLDER}{_feature}.sk"
-		else:
-			send "&c[{@LIB_PREFIX}] &7Feature &e%{_feature}% &7is enabled but the file was not found in &e{@LIB_FOLDER}" to console	
